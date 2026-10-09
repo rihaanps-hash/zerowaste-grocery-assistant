@@ -1,0 +1,7 @@
+sku_id,name,category,shelf_life_days,unit_cost,retail_price,safety_stock,reorder_batch_size,base_daily_demand,price_elasticity,temp_optimum_c
+SKU_MILK_1L,Whole Milk 1L,Dairy,7,1.8,3.49,18,45,32,1.4,3.5
+SKU_BREAD_WHEAT,Artisan Whole Wheat Bread,Bakery,4,1.1,2.99,14,35,26,1.8,20.0
+SKU_BERRIES_250G,Fresh Strawberries 250g,Produce,3,2.2,4.99,10,25,19,2.2,2.0
+SKU_YOGURT_500G,Greek Yogurt 500g,Dairy,12,1.6,3.79,15,40,22,1.2,4.0
+SKU_SALAD_BOWL,Organic Salad Bowl,Produce,4,2.1,4.89,12,30,24,2.0,4.0
+SKU_CHICKEN_500G,Fresh Chicken Breast 500g,Meat,4,3.8,6.99,12,25,20,1.6,1.5

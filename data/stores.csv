@@ -1,0 +1,4 @@
+store_id,store_name,location,traffic_factor,manager_name,contact_email
+STORE_001,Downtown Express,Metro Financial Center,1.35,Alex Vance,alex.vance@zerowastegrocery.com
+STORE_002,Suburban Hub,Westfield Green District,0.9,Sarah Jenkins,sarah.j@zerowastegrocery.com
+STORE_003,Uptown Fresh Mart,Northside Residential Ave,1.1,Marcus Rivera,marcus.r@zerowastegrocery.com

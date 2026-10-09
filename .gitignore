@@ -1,0 +1,16 @@
+# Environment variables (keeps your Telegram Bot Token secret)
+.env
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.joblib
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# SQLite databases
+*.db-journal

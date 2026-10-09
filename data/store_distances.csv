@@ -1,0 +1,7 @@
+from_store,to_store,distance_km,transfer_fee,transit_hours
+STORE_001,STORE_002,7.4,9.5,1.0
+STORE_001,STORE_003,4.8,6.5,0.5
+STORE_002,STORE_001,7.4,9.5,1.0
+STORE_002,STORE_003,9.2,11.0,1.2
+STORE_003,STORE_001,4.8,6.5,0.5
+STORE_003,STORE_002,9.2,11.0,1.2

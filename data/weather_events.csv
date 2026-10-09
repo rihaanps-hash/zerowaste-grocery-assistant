@@ -1,0 +1,99 @@
+date,weather,temperature_c,event,is_weekend,foot_traffic_multiplier
+2026-07-11,Sunny,23.2,Normal Day,1,1.26
+2026-07-12,Sunny,26.8,Normal Day,1,1.26
+2026-07-13,Sunny,26.7,Normal Day,0,1.05
+2026-07-14,Rainy,20.0,Normal Day,0,0.85
+2026-07-15,Sunny,24.5,Normal Day,0,1.05
+2026-07-16,Sunny,24.7,Normal Day,0,1.05
+2026-07-17,Sunny,19.5,Normal Day,0,1.05
+2026-07-18,Sunny,28.4,Normal Day,1,1.26
+2026-07-19,Partly Cloudy,20.1,Normal Day,1,1.2
+2026-07-20,Sunny,24.1,Normal Day,0,1.05
+2026-07-21,Partly Cloudy,19.7,Normal Day,0,1.0
+2026-07-22,Partly Cloudy,22.2,Normal Day,0,1.0
+2026-07-23,Partly Cloudy,21.2,Normal Day,0,1.0
+2026-07-24,Sunny,24.7,Normal Day,0,1.05
+2026-07-25,Sunny,24.5,Normal Day,1,1.26
+2026-07-26,Sunny,28.4,Normal Day,1,1.26
+2026-07-27,Rainy,16.0,Normal Day,0,0.85
+2026-07-28,Partly Cloudy,20.7,Normal Day,0,1.0
+2026-07-29,Sunny,25.4,Normal Day,0,1.05
+2026-07-30,Rainy,18.8,Normal Day,0,0.85
+2026-07-31,Sunny,32.9,Normal Day,0,1.05
+2026-08-01,Sunny,29.0,Normal Day,1,1.26
+2026-08-02,Heatwave,33.3,Normal Day,1,1.32
+2026-08-03,Mild,22.8,Normal Day,0,1.0
+2026-08-04,Sunny,23.5,Normal Day,0,1.05
+2026-08-05,Sunny,22.0,Normal Day,0,1.05
+2026-08-06,Rainy,15.3,Normal Day,0,0.85
+2026-08-07,Partly Cloudy,19.2,Normal Day,0,1.0
+2026-08-08,Sunny,27.5,Normal Day,1,1.26
+2026-08-09,Rainy,19.8,Normal Day,1,1.02
+2026-08-10,Rainy,17.6,Normal Day,0,0.85
+2026-08-11,Sunny,24.4,Normal Day,0,1.05
+2026-08-12,Heavy Storm,11.2,Normal Day,0,0.7
+2026-08-13,Sunny,28.7,Normal Day,0,1.05
+2026-08-14,Sunny,28.9,Normal Day,0,1.05
+2026-08-15,Partly Cloudy,19.2,Normal Day,1,1.2
+2026-08-16,Mild,18.9,Normal Day,1,1.2
+2026-08-17,Rainy,17.8,Normal Day,0,0.85
+2026-08-18,Rainy,21.0,Normal Day,0,0.85
+2026-08-19,Partly Cloudy,21.7,Normal Day,0,1.0
+2026-08-20,Partly Cloudy,20.2,Normal Day,0,1.0
+2026-08-21,Sunny,25.8,Normal Day,0,1.05
+2026-08-22,Sunny,22.5,Normal Day,1,1.26
+2026-08-23,Partly Cloudy,23.1,Normal Day,1,1.2
+2026-08-24,Mild,19.9,Normal Day,0,1.0
+2026-08-25,Rainy,15.0,Community Sports Meet,0,1.062
+2026-08-26,Sunny,25.5,Normal Day,0,1.05
+2026-08-27,Sunny,24.9,Normal Day,0,1.05
+2026-08-28,Mild,22.0,Normal Day,0,1.0
+2026-08-29,Heavy Storm,17.9,Normal Day,1,0.84
+2026-08-30,Rainy,20.7,Normal Day,1,1.02
+2026-08-31,Mild,21.4,Normal Day,0,1.0
+2026-09-01,Sunny,25.4,Normal Day,0,1.05
+2026-09-02,Partly Cloudy,20.3,Normal Day,0,1.0
+2026-09-03,Rainy,12.7,Normal Day,0,0.85
+2026-09-04,Sunny,26.9,Normal Day,0,1.05
+2026-09-05,Sunny,27.1,Normal Day,1,1.26
+2026-09-06,Sunny,25.6,Normal Day,1,1.26
+2026-09-07,Partly Cloudy,19.1,Normal Day,0,1.0
+2026-09-08,Heatwave,35.1,Normal Day,0,1.1
+2026-09-09,Heatwave,33.0,Normal Day,0,1.1
+2026-09-10,Sunny,21.8,Normal Day,0,1.05
+2026-09-11,Sunny,26.3,Downtown Street Fair,0,1.312
+2026-09-12,Partly Cloudy,20.1,Normal Day,1,1.2
+2026-09-13,Sunny,27.2,Normal Day,1,1.26
+2026-09-14,Sunny,25.4,Normal Day,0,1.05
+2026-09-15,Sunny,26.8,Normal Day,0,1.05
+2026-09-16,Sunny,26.0,Normal Day,0,1.05
+2026-09-17,Rainy,16.4,Normal Day,0,0.85
+2026-09-18,Rainy,19.5,Normal Day,0,0.85
+2026-09-19,Sunny,29.5,Normal Day,1,1.26
+2026-09-20,Partly Cloudy,23.8,Normal Day,1,1.2
+2026-09-21,Sunny,24.8,Normal Day,0,1.05
+2026-09-22,Sunny,28.3,Normal Day,0,1.05
+2026-09-23,Sunny,30.3,Normal Day,0,1.05
+2026-09-24,Sunny,28.2,Normal Day,0,1.05
+2026-09-25,Partly Cloudy,22.3,Long Weekend Holiday,0,1.25
+2026-09-26,Sunny,22.9,Normal Day,1,1.26
+2026-09-27,Rainy,19.2,Normal Day,1,1.02
+2026-09-28,Sunny,25.6,Normal Day,0,1.05
+2026-09-29,Sunny,25.1,Normal Day,0,1.05
+2026-09-30,Rainy,19.1,Normal Day,0,0.85
+2026-10-01,Rainy,20.7,Normal Day,0,0.85
+2026-10-02,Sunny,32.3,Normal Day,0,1.05
+2026-10-03,Sunny,22.4,Normal Day,1,1.26
+2026-10-04,Sunny,29.0,Normal Day,1,1.26
+2026-10-05,Rainy,19.2,Normal Day,0,0.85
+2026-10-06,Sunny,29.0,Midweek Marathon,0,1.312
+2026-10-07,Sunny,26.6,Normal Day,0,1.05
+2026-10-08,Sunny,28.1,Normal Day,0,1.05
+2026-10-09,Sunny,26.4,Normal Day,0,1.05
+2026-10-10,Rainy,15.6,Local Farmers Market,1,1.275
+2026-10-11,Rainy,19.5,Normal Day,1,1.02
+2026-10-12,Sunny,23.6,Heatwave Advisory,0,1.312
+2026-10-13,Sunny,27.9,Normal Day,0,1.05
+2026-10-14,Heavy Storm,18.2,Weekend Music Festival,0,0.875
+2026-10-15,Rainy,16.3,Normal Day,0,0.85
+2026-10-16,Sunny,26.4,Normal Day,0,1.05
