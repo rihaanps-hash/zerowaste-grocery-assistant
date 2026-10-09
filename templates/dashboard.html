@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroWaste Grocery Assistant | AI Perishable Inventory Platform</title>
+  <meta name="description" content="AI Multi-Agent Grocery Assistant for reducing perishable food waste, optimizing stock replenishment, and dynamic markdowns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: rgba(18, 24, 38, 0.75);
+      --bg-card-hover: rgba(26, 34, 52, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(16, 185, 129, 0.3);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-blue: #38bdf8;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-purple: #8b5cf6;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.06) 0%, transparent 40%);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: rgba(10, 14, 23, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-green), #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 20px var(--accent-green-glow);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--accent-green);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #34d399;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    select.store-selector {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    select.store-selector:focus {
+      border-color: var(--accent-green);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1540px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Chat Section (Left Column) */
+    .chat-section {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+      position: sticky;
+      top: 90px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .chat-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bot-avatar {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .chat-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .chat-subtitle {
+      font-size: 11px;
+      color: var(--accent-green);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      max-width: 92%;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      line-height: 1.55;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.bot pre {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin: 8px 0;
+      overflow-x: auto;
+    }
+
+    .message-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: var(--accent-green);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.approve {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+    }
+
+    .action-btn.approve:hover {
+      background: var(--accent-green);
+      color: #042f2e;
+    }
+
+    .action-btn.reject {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .action-btn.reject:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .action-btn.modify {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fcd34d;
+    }
+
+    .action-btn.modify:hover {
+      background: var(--accent-amber);
+      color: #000;
+    }
+
+    /* Prompt Suggestions */
+    .prompt-suggestions {
+      padding: 10px 18px;
+      background: rgba(15, 23, 42, 0.5);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .prompt-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .prompt-chip:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .chat-input-area {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-size: 13.5px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .chat-input:focus {
+      border-color: var(--accent-green);
+    }
+
+    .send-btn {
+      background: linear-gradient(135deg, var(--accent-green), #059669);
+      border: none;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .send-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Right Column: Dashboard Tabs & Details */
+    .dashboard-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* KPI Summary Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.green::before { background: var(--accent-green); }
+    .kpi-card.blue::before { background: var(--accent-blue); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+
+    .kpi-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin: 8px 0 4px;
+    }
+
+    .kpi-card.green .kpi-value { color: var(--accent-green); }
+    .kpi-card.blue .kpi-value { color: var(--accent-blue); }
+    .kpi-card.amber .kpi-value { color: var(--accent-amber); }
+
+    .kpi-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 -2px 0 var(--accent-green);
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Inventory Table Card */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      backdrop-filter: blur(14px);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .custom-table th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .custom-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+    }
+
+    .custom-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge.critical { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge.warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge.fresh { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge.low { background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.4); }
+
+    /* Agents Architecture Grid */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .agent-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .agent-icon {
+      font-size: 20px;
+    }
+
+    .agent-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .agent-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Reports & Graphs */
+    .graphs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .graphs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .graph-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    .graph-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .graph-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Decisions log table */
+    .decisions-table td {
+      font-size: 12.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo-badge">🥬</div>
+      <div>
+        <div class="brand-title">ZeroWaste Grocery Assistant</div>
+        <div class="brand-subtitle">AI Perishable Inventory & Multi-Agent Orchestrator</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>5 AI Agents Active</span>
+      </div>
+
+      <select class="store-selector" id="storeSelect" onchange="changeStore()">
+        <option value="STORE_001">Downtown Express (STORE_001)</option>
+        <option value="STORE_002">Suburban Hub (STORE_002)</option>
+        <option value="STORE_003">Uptown Fresh Mart (STORE_003)</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main>
+    
+    <!-- Left Column: Telegram-Style Interactive Chat -->
+    <section class="chat-section">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="bot-avatar">🤖</div>
+          <div>
+            <div class="chat-title">ZeroWaste Bot</div>
+            <div class="chat-subtitle">Connected to Telegram & FastAPI Core</div>
+          </div>
+        </div>
+        <button class="action-btn" onclick="clearChat()">Clear</button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <!-- Initial Welcome Message -->
+        <div class="message bot">
+          👋 <strong>Hello Store Manager!</strong><br><br>
+          I'm your <strong>ZeroWaste Assistant</strong>. You can ask me natural questions about order quantities, markdowns, or waste risks for your store.<br><br>
+          Try clicking a quick prompt below or type your question!
+          <div class="message-buttons">
+            <button class="action-btn" onclick="sendQuickPrompt('How much milk should I order today?')">🥛 Milk Order</button>
+            <button class="action-btn" onclick="sendQuickPrompt('Do I need to discount bread?')">🍞 Bread Markdown</button>
+            <button class="action-btn" onclick="sendQuickPrompt('Is my store at risk of waste this week?')">🚨 Waste Audit</button>
+            <button class="action-btn" onclick="sendQuickPrompt('Show evaluation report')">📊 Baseline Report</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Chips -->
+      <div class="prompt-suggestions">
+        <span class="prompt-chip" onclick="sendQuickPrompt('How much milk should I order today?')">How much milk to order?</span>
+        <span class="prompt-chip" onclick="sendQuickPrompt('Do I need to discount bread?')">Discount bread?</span>
+        <span class="prompt-chip" onclick="sendQuickPrompt('What should I transfer to other stores?')">Transfer items?</span>
+        <span class="prompt-chip" onclick="sendQuickPrompt('Is my store at risk of waste this week?')">Weekly waste risk?</span>
+        <span class="prompt-chip" onclick="sendQuickPrompt('Show evaluation report')">AI vs Baseline</span>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <input type="text" id="userInput" class="chat-input" placeholder="Type a message (e.g. 'How much milk should I order today?')" onkeypress="handleKeyPress(event)">
+        <button class="send-btn" onclick="sendMessage()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Right Column: Manager Dashboard & Insights -->
+    <section class="dashboard-content">
+      
+      <!-- Top KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card green">
+          <div class="kpi-title">Waste Reduction</div>
+          <div class="kpi-value" id="kpiWaste">-65.0%</div>
+          <div class="kpi-subtext">vs. static rule baseline (~718 units rescued)</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-title">Stockout Reduction</div>
+          <div class="kpi-value" id="kpiStockout">-68.0%</div>
+          <div class="kpi-subtext">fewer out-of-stock incidents across SKUs</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-title">Margin Improvement</div>
+          <div class="kpi-value" id="kpiMargin">+21.5%</div>
+          <div class="kpi-subtext">net gross profit recovery (+ $2,591)</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('inventoryTab', this)">Perishable Inventory</button>
+        <button class="tab-btn" onclick="switchTab('agentsTab', this)">AI Agents Architecture</button>
+        <button class="tab-btn" onclick="switchTab('reportsTab', this)">Evaluation & Graphs</button>
+        <button class="tab-btn" onclick="switchTab('decisionsTab', this)">Decision Audit Trail</button>
+      </div>
+
+      <!-- Tab 1: Live Inventory Table -->
+      <div class="tab-panel active" id="inventoryTab">
+        <div class="section-card">
+          <div class="section-header">
+            <h2 class="section-title">Batch-Level Perishable Inventory Matrix</h2>
+            <button class="action-btn" onclick="loadInventory()">🔄 Refresh Stock</button>
+          </div>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Batch</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Expires In</th>
+                <th>Freshness Status</th>
+                <th>Quick Action</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <tr><td colspan="7" style="text-align:center;">Loading inventory...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: AI Agents Architecture -->
+      <div class="tab-panel" id="agentsTab">
+        <div class="section-card">
+          <h2 class="section-title">Multi-Agent AI Decision System</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+            Five specialized autonomous agents feed into the Central Orchestration Layer to optimize perishable inventory.
+          </p>
+
+          <div class="agents-grid">
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-icon">📈</span>
+                <span class="agent-name">Demand Forecaster</span>
+              </div>
+              <p class="agent-desc">
+                Machine Learning engine trained on 90-day sales history, day-of-week, foot traffic, temperature, and local events to forecast next 3-7 days with confidence intervals.
+              </p>
+            </div>
+
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-icon">⏳</span>
+                <span class="agent-name">Freshness Agent</span>
+              </div>
+              <p class="agent-desc">
+                Tracks batch-level shelf-life using FEFO (First-Expired-First-Out) simulation. Quantifies exact units at risk of expiring before normal sales velocity can clear them.
+              </p>
+            </div>
+
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-icon">📦</span>
+                <span class="agent-name">Stock Agent</span>
+              </div>
+              <p class="agent-desc">
+                Calculates lead-time demand, dynamic safety stock, and Days of Inventory (DOI). Triggers immediate reorder recommendations to avoid costly customer stockouts.
+              </p>
+            </div>
+
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-icon">🏷️</span>
+                <span class="agent-name">Markdown Agent</span>
+              </div>
+              <p class="agent-desc">
+                Uses price elasticity optimization across 15%, 25%, 35%, and 50% discount tiers. Calculates optimal flash discount timing to accelerate sell-through vs 100% loss.
+              </p>
+            </div>
+
+            <div class="agent-card">
+              <div class="agent-header">
+                <span class="agent-icon">🚚</span>
+                <span class="agent-name">Transfer Agent</span>
+              </div>
+              <p class="agent-desc">
+                Scans network stores to rebalance stock. Routes surplus near-expiry items to nearby stores facing impending stockouts, verifying logistics transit fees.
+              </p>
+            </div>
+
+            <div class="agent-card" style="border-color: var(--accent-green);">
+              <div class="agent-header">
+                <span class="agent-icon">🧠</span>
+                <span class="agent-name" style="color: var(--accent-green);">Orchestration Layer</span>
+              </div>
+              <p class="agent-desc">
+                Resolves trade-offs across waste minimization, margin recovery, and fill rate. Formats structured recommendations with confidence scores for human planner approval.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Evaluation & Baseline Graphs -->
+      <div class="tab-panel" id="reportsTab">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">AI vs Rule-Based Baseline Performance</h2>
+              <p style="font-size: 13px; color: var(--text-muted);">
+                Simulated 14-day operations comparing ZeroWaste AI vs Static Reorder & 10% Late Markdown
+              </p>
+            </div>
+            <button class="action-btn approve" onclick="runEvaluation()">▶️ Run 14-Day Simulation</button>
+          </div>
+
+          <div class="graphs-grid">
+            <div class="graph-box">
+              <img id="imgWaste" src="/static/reports/waste_comparison.png" alt="Waste Comparison">
+              <div class="graph-caption">Category-Wise Spoilage Reduction (Produce, Dairy, Bakery, Meat)</div>
+            </div>
+            <div class="graph-box">
+              <img id="imgMargin" src="/static/reports/margin_comparison.png" alt="Margin Comparison">
+              <div class="graph-caption">Cumulative Gross Margin & Profit Trajectory</div>
+            </div>
+          </div>
+
+          <div class="graph-box" style="margin-top: 20px;">
+            <img id="imgKpi" src="/static/reports/executive_kpis.png" alt="Executive KPI Dashboard">
+            <div class="graph-caption">Executive Performance Scorecard</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Decision Audit Trail -->
+      <div class="tab-panel" id="decisionsTab">
+        <div class="section-card">
+          <div class="section-header">
+            <h2 class="section-title">Store Manager Decision Audit Trail</h2>
+            <button class="action-btn" onclick="loadDecisions()">🔄 Refresh Log</button>
+          </div>
+          <table class="custom-table decisions-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Ref ID</th>
+                <th>Product</th>
+                <th>Store</th>
+                <th>Decision</th>
+                <th>Applied Operation</th>
+                <th>Manager</th>
+              </tr>
+            </thead>
+            <tbody id="decisionsTableBody">
+              <tr><td colspan="7" style="text-align:center;">Loading decision audit trail...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    let currentStore = "STORE_001";
+
+    function changeStore() {
+      currentStore = document.getElementById("storeSelect").value;
+      loadInventory();
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      btn.classList.add("active");
+
+      if (tabId === "inventoryTab") loadInventory();
+      if (tabId === "decisionsTab") loadDecisions();
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === "Enter") sendMessage();
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+
+      appendMessage(text, "user");
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text, store_id: currentStore })
+        });
+        const data = await res.json();
+        appendBotMessage(data);
+      } catch (err) {
+        appendMessage("⚠️ Error contacting AI backend: " + err.message, "bot");
+      }
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById("userInput").value = promptText;
+      sendMessage();
+    }
+
+    function appendMessage(text, sender) {
+      const container = document.getElementById("chatMessages");
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerText = text;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendBotMessage(data) {
+      const container = document.getElementById("chatMessages");
+      const div = document.createElement("div");
+      div.className = "message bot";
+
+      // Format markdown-like bold and line breaks
+      let formattedText = data.text
+        .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
+        .replace(/`(.*?)`/g, "<code>$1</code>")
+        .replace(/\n/g, "<br>");
+
+      div.innerHTML = formattedText;
+
+      // Add buttons if present
+      if (data.buttons && data.buttons.length > 0) {
+        const btnContainer = document.createElement("div");
+        btnContainer.className = "message-buttons";
+
+        data.buttons.forEach(row => {
+          row.forEach(btn => {
+            const b = document.createElement("button");
+            b.className = "action-btn";
+            if (btn.text.includes("Approve")) b.classList.add("approve");
+            if (btn.text.includes("Reject")) b.classList.add("reject");
+            if (btn.text.includes("Modify")) b.classList.add("modify");
+
+            b.innerText = btn.text;
+            b.onclick = () => handleButtonClick(btn.callback_data);
+            btnContainer.appendChild(b);
+          });
+        });
+        div.appendChild(btnContainer);
+      }
+
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function handleButtonClick(cbData) {
+      const parts = cbData.split(":");
+      const prefix = parts[0];
+
+      if (prefix === "dec") {
+        const decision = parts[1];
+        const recId = parts[2];
+        try {
+          const res = await fetch("/api/decision", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ recommendation_id: recId, decision: decision })
+          });
+          const result = await res.json();
+          appendMessage(`✅ Action ${decision} recorded for ${recId}!`, "bot");
+          loadDecisions();
+        } catch (e) {
+          alert("Failed to record decision: " + e.message);
+        }
+      } else if (prefix === "sku") {
+        const skuId = parts[1];
+        const storeId = parts[2];
+        sendQuickPrompt(`Evaluate ${skuId} for ${storeId}`);
+      } else if (prefix === "audit") {
+        sendQuickPrompt("Is my store at risk of waste this week?");
+      } else if (prefix === "report") {
+        sendQuickPrompt("Show evaluation report");
+      }
+    }
+
+    function clearChat() {
+      document.getElementById("chatMessages").innerHTML = "";
+    }
+
+    async function loadInventory() {
+      try {
+        const res = await fetch(`/api/inventory?store_id=${currentStore}`);
+        const data = await res.json();
+        const tbody = document.getElementById("inventoryTableBody");
+        tbody.innerHTML = "";
+
+        data.forEach(item => {
+          const tr = document.createElement("tr");
+          let badgeClass = "fresh";
+          let badgeText = `${item.remaining_shelf_days} days`;
+
+          if (item.remaining_shelf_days <= 1) {
+            badgeClass = "critical";
+            badgeText = "CRITICAL (<=24h)";
+          } else if (item.remaining_shelf_days <= 2) {
+            badgeClass = "warning";
+            badgeText = "2 Days Left";
+          }
+
+          tr.innerHTML = `
+            <td><code>${item.batch_id}</code></td>
+            <td><strong>${item.name}</strong></td>
+            <td>${item.category}</td>
+            <td><strong>${item.quantity}</strong> units</td>
+            <td>${item.expiry_date}</td>
+            <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+            <td>
+              <button class="action-btn" onclick="sendQuickPrompt('Evaluate ${item.sku_id}')">⚡ AI Analyze</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Failed to load inventory:", err);
+      }
+    }
+
+    async function loadDecisions() {
+      try {
+        const res = await fetch("/api/decisions");
+        const data = await res.json();
+        const tbody = document.getElementById("decisionsTableBody");
+        tbody.innerHTML = "";
+
+        if (!data.recent || data.recent.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No manager decisions recorded yet. Test an action in chat!</td></tr>`;
+          return;
+        }
+
+        data.recent.forEach(d => {
+          const tr = document.createElement("tr");
+          const color = d.decision === "APPROVED" ? "#10b981" : (d.decision === "REJECTED" ? "#ef4444" : "#f59e0b");
+          tr.innerHTML = `
+            <td>${d.timestamp ? d.timestamp.substring(11, 19) : ''}</td>
+            <td><code>${d.rec_id}</code></td>
+            <td>${d.product_name || 'SKU'}</td>
+            <td>${d.store_id || 'STORE_001'}</td>
+            <td><strong style="color: ${color};">${d.decision}</strong></td>
+            <td><code>${d.applied_action}</code></td>
+            <td>${d.manager_id}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Failed to load decisions:", err);
+      }
+    }
+
+    async function runEvaluation() {
+      try {
+        appendMessage("Running 14-day multi-agent simulation vs baseline...", "user");
+        const res = await fetch("/api/evaluation?days=14");
+        const data = await res.json();
+        
+        document.getElementById("kpiWaste").innerText = `-${data.waste_reduction_pct}%`;
+        document.getElementById("kpiStockout").innerText = `-${data.stockout_reduction_pct}%`;
+        document.getElementById("kpiMargin").innerText = `+${data.margin_improvement_pct}%`;
+
+        // Refresh images with cache-busting timestamp
+        const ts = new Date().getTime();
+        document.getElementById("imgWaste").src = `/static/reports/waste_comparison.png?t=${ts}`;
+        document.getElementById("imgMargin").src = `/static/reports/margin_comparison.png?t=${ts}`;
+        document.getElementById("imgKpi").src = `/static/reports/executive_kpis.png?t=${ts}`;
+
+        appendMessage(`✅ Simulation complete! Waste Reduction: ${data.waste_reduction_pct}%, Stockout Reduction: ${data.stockout_reduction_pct}%, Margin Gain: +${data.margin_improvement_pct}%.`, "bot");
+      } catch (err) {
+        alert("Evaluation failed: " + err.message);
+      }
+    }
+
+    // Initial data load on page start
+    window.onload = () => {
+      loadInventory();
+      loadDecisions();
+    };
+  </script>
+</body>
+</html>
